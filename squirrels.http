@@ -1,0 +1,6 @@
+@squirrels_HostAddress = http://localhost:5216
+
+GET {{squirrels_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
