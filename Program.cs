@@ -27,3 +27,7 @@ app.MapGet("/health", () =>
 .WithName("health");
 
 app.Run();
+
+
+// pw admin
+// port 5432

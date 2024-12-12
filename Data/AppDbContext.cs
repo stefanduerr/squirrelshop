@@ -1,5 +1,6 @@
 namespace Squirrels.Data;
 using Microsoft.EntityFrameworkCore;
+using squirrels.Models;
 
 public class AppDbContext : DbContext
 {
@@ -7,4 +8,10 @@ public class AppDbContext : DbContext
     {
 
     }
+
+    public DbSet<Product> Products { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<UserProduct> UserProducts { get; set; }
+    public DbSet<OrderProduct> OrderProducts { get; set; }
 }
