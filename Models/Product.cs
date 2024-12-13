@@ -4,25 +4,22 @@ namespace squirrels.Models
 {
     public class Product
     {
-        [Key]                                        // Specifies that Id is the primary key
+        [Key]
         public int Id { get; set; }
 
-        [Required]                                   // Name cannot be null
+        [Required]
         public string Name { get; set; } = string.Empty;
-        
-        [Required]                                   // Name cannot be null
-        public string ProductType { get; set; } = string.Empty;
-                                   // Name cannot be null
-        public string? Size { get; set; }
 
+        [Required]
+        public string ProductType { get; set; } = string.Empty;
+
+        public string? Size { get; set; }
         public string? Color { get; set; }
 
-        public long Price { get; set; }
+        public decimal Price { get; set; }
+        public decimal? Discount { get; set; }
 
-        public long? Discount { get; set; }
-
-        // Navigation Properties
-        public ICollection<UserProduct> UserProducts { get; set; } = new List<UserProduct>();
+        public ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();
         public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
     }
 }

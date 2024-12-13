@@ -1,22 +1,28 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace squirrels.Models
+namespace squirrels.Models;
+public class Order
 {
-    public class Order
-    {
-        [Key]
-        public int Id { get; set; } // Primary Key
+    [Key]
+    public int Id { get; set; } // Primary Key
 
-        [ForeignKey("User")]
-        public int UserId { get; set; } // Foreign Key
-        public decimal TotalPrice { get; set; }
-        public DateTime OrderDate { get; set; }
-        public string? OrderStatus { get; set; }
+    [ForeignKey("User")]
+    public int UserId { get; set; } // Foreign Key
 
-        // Navigation Properties
-        public User User { get; set; } = new User();
-        public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
+    public decimal TotalPrice { get; set; }
+    public DateTime OrderDate { get; set; }
 
-    }
+    public OrderStatus Status { get; set; } = OrderStatus.Pending;
+
+    // Navigation Properties
+    public User User { get; set; }
+    public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
+}
+
+public enum OrderStatus
+{
+    Pending,
+    Completed,
+    Cancelled
 }
