@@ -23,7 +23,10 @@ namespace squirrels.Migrations
                     Size = table.Column<string>(type: "text", nullable: true),
                     Color = table.Column<string>(type: "text", nullable: true),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
-                    Discount = table.Column<decimal>(type: "numeric", nullable: true)
+                    Discount = table.Column<decimal>(type: "numeric", nullable: true),
+                    StockQuantity = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    ImageUrl = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,18 +52,19 @@ namespace squirrels.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cart",
+                name: "Carts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    UserId = table.Column<int>(type: "integer", nullable: false)
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Cart", x => x.Id);
+                    table.PrimaryKey("PK_Carts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Cart_Users_UserId",
+                        name: "FK_Carts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -76,6 +80,8 @@ namespace squirrels.Migrations
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "numeric", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -90,7 +96,36 @@ namespace squirrels.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CartProduct",
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
+                    Rating = table.Column<int>(type: "integer", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CartProducts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -101,15 +136,15 @@ namespace squirrels.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartProduct", x => x.Id);
+                    table.PrimaryKey("PK_CartProducts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CartProduct_Cart_CartId",
+                        name: "FK_CartProducts_Carts_CartId",
                         column: x => x.CartId,
-                        principalTable: "Cart",
+                        principalTable: "Carts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CartProduct_Products_ProductId",
+                        name: "FK_CartProducts_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -117,7 +152,7 @@ namespace squirrels.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderProduct",
+                name: "OrderProducts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -128,15 +163,15 @@ namespace squirrels.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderProduct", x => x.Id);
+                    table.PrimaryKey("PK_OrderProducts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderProduct_Orders_OrderId",
+                        name: "FK_OrderProducts_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderProduct_Products_ProductId",
+                        name: "FK_OrderProducts_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -144,34 +179,44 @@ namespace squirrels.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cart_UserId",
-                table: "Cart",
+                name: "IX_CartProducts_CartId",
+                table: "CartProducts",
+                column: "CartId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartProducts_ProductId",
+                table: "CartProducts",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Carts_UserId",
+                table: "Carts",
                 column: "UserId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartProduct_CartId",
-                table: "CartProduct",
-                column: "CartId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CartProduct_ProductId",
-                table: "CartProduct",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderProduct_OrderId",
-                table: "OrderProduct",
+                name: "IX_OrderProducts_OrderId",
+                table: "OrderProducts",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderProduct_ProductId",
-                table: "OrderProduct",
+                name: "IX_OrderProducts_ProductId",
+                table: "OrderProducts",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
                 table: "Orders",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_ProductId",
+                table: "Reviews",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_UserId",
+                table: "Reviews",
                 column: "UserId");
         }
 
@@ -179,13 +224,16 @@ namespace squirrels.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CartProduct");
+                name: "CartProducts");
 
             migrationBuilder.DropTable(
-                name: "OrderProduct");
+                name: "OrderProducts");
 
             migrationBuilder.DropTable(
-                name: "Cart");
+                name: "Reviews");
+
+            migrationBuilder.DropTable(
+                name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "Orders");

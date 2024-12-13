@@ -30,6 +30,9 @@ namespace squirrels.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
@@ -38,7 +41,7 @@ namespace squirrels.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Cart");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("squirrels.Models.CartProduct", b =>
@@ -64,7 +67,7 @@ namespace squirrels.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartProduct");
+                    b.ToTable("CartProducts");
                 });
 
             modelBuilder.Entity("squirrels.Models.Order", b =>
@@ -75,6 +78,9 @@ namespace squirrels.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -83,6 +89,9 @@ namespace squirrels.Migrations
 
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("numeric");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -117,7 +126,7 @@ namespace squirrels.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProduct");
+                    b.ToTable("OrderProducts");
                 });
 
             modelBuilder.Entity("squirrels.Models.Product", b =>
@@ -131,8 +140,16 @@ namespace squirrels.Migrations
                     b.Property<string>("Color")
                         .HasColumnType("text");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<decimal?>("Discount")
                         .HasColumnType("numeric");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -148,9 +165,45 @@ namespace squirrels.Migrations
                     b.Property<string>("Size")
                         .HasColumnType("text");
 
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("squirrels.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("squirrels.Models.User", b =>
@@ -250,6 +303,25 @@ namespace squirrels.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("squirrels.Models.Review", b =>
+                {
+                    b.HasOne("squirrels.Models.Product", "Product")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("squirrels.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("squirrels.Models.Cart", b =>
                 {
                     b.Navigation("CartProducts");
@@ -265,6 +337,8 @@ namespace squirrels.Migrations
                     b.Navigation("CartProducts");
 
                     b.Navigation("OrderProducts");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("squirrels.Models.User", b =>

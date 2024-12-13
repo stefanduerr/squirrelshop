@@ -5,17 +5,16 @@ namespace squirrels.Models;
 public class OrderProduct
 {
     [Key]
-    public int Id { get; set; } // Primary Key
+    public int Id { get; set; }
 
     [ForeignKey("Order")]
-    public int OrderId { get; set; } // Foreign Key
+    public int OrderId { get; set; }
 
-    [ForeignKey("Product")]
-    public int ProductId { get; set; } // Foreign Key
+    [ForeignKey("Product")] 
+    public int ProductId { get; set; }
 
-    public int Quantity { get; set; } // Quantity of the product in the order
+    public int Quantity { get; set; }
 
-    // Navigation Properties
     public Order Order { get; set; }
     public Product Product { get; set; }
 }
