@@ -23,7 +23,7 @@ namespace squirrels.Models
         public string PostalCode { get; set; } = string.Empty;
 
         // Navigation Properties
-        public ICollection<UserProduct> UserProducts { get; set; } = new List<UserProduct>();
+        public ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();
         public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

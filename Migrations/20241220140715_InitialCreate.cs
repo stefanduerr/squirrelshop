@@ -51,6 +51,34 @@ namespace squirrels.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CartProducts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    OrderId = table.Column<int>(type: "integer", nullable: false),
+                    ProductId = table.Column<int>(type: "integer", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartProducts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CartProducts_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartProducts_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -73,7 +101,7 @@ namespace squirrels.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrderProducts",
+                name: "OrderHistory",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -84,82 +112,44 @@ namespace squirrels.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderProducts", x => x.Id);
+                    table.PrimaryKey("PK_OrderHistory", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderProducts_Orders_OrderId",
+                        name: "FK_OrderHistory_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrderProducts_Products_ProductId",
+                        name: "FK_OrderHistory_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserProducts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    OrderId = table.Column<int>(type: "integer", nullable: false),
-                    ProductId = table.Column<int>(type: "integer", nullable: false),
-                    Quantity = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserProducts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserProducts_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserProducts_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserProducts_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderProducts_OrderId",
-                table: "OrderProducts",
+                name: "IX_CartProducts_ProductId",
+                table: "CartProducts",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartProducts_UserId",
+                table: "CartProducts",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderHistory_OrderId",
+                table: "OrderHistory",
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderProducts_ProductId",
-                table: "OrderProducts",
+                name: "IX_OrderHistory_ProductId",
+                table: "OrderHistory",
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
                 table: "Orders",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserProducts_OrderId",
-                table: "UserProducts",
-                column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserProducts_ProductId",
-                table: "UserProducts",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserProducts_UserId",
-                table: "UserProducts",
                 column: "UserId");
         }
 
@@ -167,10 +157,10 @@ namespace squirrels.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "OrderProducts");
+                name: "CartProducts");
 
             migrationBuilder.DropTable(
-                name: "UserProducts");
+                name: "OrderHistory");
 
             migrationBuilder.DropTable(
                 name: "Orders");

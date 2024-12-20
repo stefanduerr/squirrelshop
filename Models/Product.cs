@@ -26,7 +26,7 @@ namespace squirrels.Models
         public string ImageUrl { get; set; }
 
         // Navigation Properties
-        public ICollection<UserProduct> UserProducts { get; set; } = new List<UserProduct>();
-        public ICollection<CartProduct> OrderProducts { get; set; } = new List<CartProduct>();
+        public ICollection<OrderHistory> OrderHistory { get; set; } = new List<OrderHistory>();
+        public ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();
     }
 }

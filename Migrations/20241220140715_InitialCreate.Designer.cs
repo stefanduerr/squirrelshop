@@ -12,7 +12,7 @@ using Squirrels.Data;
 namespace squirrels.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241220134347_InitialCreate")]
+    [Migration("20241220140715_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -42,13 +42,16 @@ namespace squirrels.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
 
-                    b.HasIndex("OrderId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderProducts");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CartProducts");
                 });
 
             modelBuilder.Entity("squirrels.Models.Order", b =>
@@ -76,6 +79,32 @@ namespace squirrels.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("squirrels.Models.OrderHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderHistory");
                 });
 
             modelBuilder.Entity("squirrels.Models.Product", b =>
@@ -156,54 +185,23 @@ namespace squirrels.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("squirrels.Models.UserProduct", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserProducts");
-                });
-
             modelBuilder.Entity("squirrels.Models.CartProduct", b =>
                 {
-                    b.HasOne("squirrels.Models.Order", "Order")
-                        .WithMany("OrderProducts")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("squirrels.Models.Product", "Product")
-                        .WithMany("OrderProducts")
+                        .WithMany("CartProducts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Order");
+                    b.HasOne("squirrels.Models.User", "User")
+                        .WithMany("CartProducts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("squirrels.Models.Order", b =>
@@ -217,23 +215,19 @@ namespace squirrels.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("squirrels.Models.UserProduct", b =>
+            modelBuilder.Entity("squirrels.Models.OrderHistory", b =>
                 {
                     b.HasOne("squirrels.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("OrderHistory")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("squirrels.Models.Product", "Product")
-                        .WithMany("UserProducts")
+                        .WithMany("OrderHistory")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("squirrels.Models.User", null)
-                        .WithMany("UserProducts")
-                        .HasForeignKey("UserId");
 
                     b.Navigation("Order");
 
@@ -242,21 +236,21 @@ namespace squirrels.Migrations
 
             modelBuilder.Entity("squirrels.Models.Order", b =>
                 {
-                    b.Navigation("OrderProducts");
+                    b.Navigation("OrderHistory");
                 });
 
             modelBuilder.Entity("squirrels.Models.Product", b =>
                 {
-                    b.Navigation("OrderProducts");
+                    b.Navigation("CartProducts");
 
-                    b.Navigation("UserProducts");
+                    b.Navigation("OrderHistory");
                 });
 
             modelBuilder.Entity("squirrels.Models.User", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("CartProducts");
 
-                    b.Navigation("UserProducts");
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }

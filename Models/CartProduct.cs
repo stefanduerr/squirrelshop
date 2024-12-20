@@ -11,7 +11,7 @@ namespace squirrels.Models
         public int Quantity { get; set; }
 
         // Navigation Properties
-        public Order Order { get; set; } = new Order();
+        public User User { get; set; } = new User();
         public Product Product { get; set; } = new Product();
     }
 }

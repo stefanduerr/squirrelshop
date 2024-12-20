@@ -2,7 +2,7 @@
 
 namespace squirrels.Models
 {
-    public class UserProduct
+    public class OrderHistory
     {
         [Key]
         public int Id { get; set; } // Primary Key

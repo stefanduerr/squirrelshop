@@ -16,7 +16,7 @@ namespace squirrels.Models
 
         // Navigation Properties
         public User User { get; set; } = new User();
-        public ICollection<CartProduct> OrderProducts { get; set; } = new List<CartProduct>();
+        public ICollection<OrderHistory> OrderHistory { get; set; } = new List<OrderHistory>();
 
     }
 
