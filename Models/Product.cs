@@ -12,7 +12,7 @@ namespace squirrels.Models
         
         [Required]                                   // Name cannot be null
         public string ProductType { get; set; } = string.Empty;
-                                   // Name cannot be null
+        //  If ProductType is always expected to be non-null, initializing it with string.Empty communicates that intent clearly
         public string? Size { get; set; }
 
         public string? Color { get; set; }
@@ -21,8 +21,12 @@ namespace squirrels.Models
 
         public long? Discount { get; set; }
 
+        public string Description { get; set; }
+
+        public string ImageUrl { get; set; }
+
         // Navigation Properties
         public ICollection<UserProduct> UserProducts { get; set; } = new List<UserProduct>();
-        public ICollection<OrderProduct> OrderProducts { get; set; } = new List<OrderProduct>();
+        public ICollection<CartProduct> OrderProducts { get; set; } = new List<CartProduct>();
     }
 }
