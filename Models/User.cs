@@ -7,6 +7,9 @@ namespace squirrels.Models
         [Key]                                        // Specifies that Id is the primary key
         public int Id { get; set; }
 
+        [Required]
+        public Role Role { get; set; }
+
         [Required]                                   // Name cannot be null
         public string FirstName { get; set; } = string.Empty;
         
@@ -25,5 +28,11 @@ namespace squirrels.Models
         // Navigation Properties
         public ICollection<CartProduct> CartProducts { get; set; } = new List<CartProduct>();
         public ICollection<Order> Orders { get; set; } = new List<Order>();
+    }
+
+    public enum Role
+    {
+        User,
+        Admin
     }
 }

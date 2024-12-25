@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using squirrels.Services;
 using Squirrels.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+
+// Register ProductService for dependency injection
+builder.Services.AddScoped<ProductService>();
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -20,6 +25,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.MapControllers();
+
 app.MapGet("/health", () =>
 {
     return "ok";
@@ -27,7 +34,6 @@ app.MapGet("/health", () =>
 .WithName("health");
 
 app.Run();
-
 
 // pw admin
 // port 5432

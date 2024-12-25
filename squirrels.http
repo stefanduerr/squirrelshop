@@ -1,6 +1,6 @@
-@squirrels_HostAddress = http://localhost:5216
+@squirrels_HostAddress = http://localhost:5050
 
-GET {{squirrels_HostAddress}}/weatherforecast/
+GET {{squirrels_HostAddress}}/api/products/
 Accept: application/json
 
 ###
