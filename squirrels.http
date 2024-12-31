@@ -1,6 +1,62 @@
 @squirrels_HostAddress = http://localhost:5050
 
-GET {{squirrels_HostAddress}}/api/products/
+GET {{squirrels_HostAddress}}/api/login/isauthorized
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsIlJvbGUiOiJBZG1pbiIsImV4cCI6MTczNTY0ODE5MSwiaXNzIjoieW91ci1pc3N1ZXIiLCJhdWQiOiJ5b3VyLWF1ZGllbmNlIn0.UfBhxiQgL6N88m-XCCYYlhPOJZkbr1oMInYlpcIEujI
+
+###
+
+POST {{squirrels_HostAddress}}/api/login
+Content-Type: application/json
+Accept: application/json
+
+{
+    "username": "test",
+    "password": "password"
+}
+
+###
+
+GET {{squirrels_HostAddress}}/api/products
 Accept: application/json
 
 ###
+
+POST {{squirrels_HostAddress}}/api/products/add
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsIlJvbGUiOiJBZG1pbiIsImV4cCI6MTczNTY1MjIxOCwiaXNzIjoieW91ci1pc3N1ZXIiLCJhdWQiOiJ5b3VyLWF1ZGllbmNlIn0.cPDihMHo5RIcezFBUAcrubfGXnJv0s67O3n0Q9yBcxw
+
+    {
+        "Name": "Green hazelnut",
+        "ProductType": "Food",
+        "Size": "L",
+        "Color": "Green",
+        "Price": 1999,
+        "Discount": 10,
+        "Description": "A very delicious, green-colored hazelnut.",
+        "ImageUrl": "https://example.com/images/green-hazelnut.jpg"
+    }
+
+###
+
+POST {{squirrels_HostAddress}}/api/users/add
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsIlJvbGUiOiJBZG1pbiIsImV4cCI6MTczNTY1MDk2MiwiaXNzIjoieW91ci1pc3N1ZXIiLCJhdWQiOiJ5b3VyLWF1ZGllbmNlIn0.LrSlutj8a_8VpkCyVXCVsSyQ2lwLcvyUq4sU2qw0zdw
+
+{
+    "FirstName": "Adam",
+    "LastName": "Beyer",
+    "Email": "bigsteve@example.com",
+    "Password": "SecurePassword234!",
+    "Address": "123 LOLOL",
+    "PostalCode": "00002",
+    "Role": "User"
+    
+}
+
+###
+
+GET {{squirrels_HostAddress}}/api/users
+Accept: application/json

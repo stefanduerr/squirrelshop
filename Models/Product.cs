@@ -21,9 +21,9 @@ namespace squirrels.Models
 
         public long? Discount { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         // Navigation Properties
         public ICollection<OrderHistory> OrderHistory { get; set; } = new List<OrderHistory>();

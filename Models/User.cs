@@ -8,7 +8,7 @@ namespace squirrels.Models
         public int Id { get; set; }
 
         [Required]
-        public Role Role { get; set; }
+        public Role Role { get; set; } = Role.User; // Required attribute needs default value
 
         [Required]                                   // Name cannot be null
         public string FirstName { get; set; } = string.Empty;
@@ -32,7 +32,7 @@ namespace squirrels.Models
 
     public enum Role
     {
-        User,
-        Admin
+        User,   // 0
+        Admin   // 1
     }
 }
