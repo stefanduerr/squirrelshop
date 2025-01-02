@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using squirrels.DTOs;
 using squirrels.Models;
 using squirrels.Services;
 
@@ -35,11 +36,19 @@ namespace squirrels.Controllers
 
         [Authorize]
         [HttpPost("addToCart")]
-        public async Task<ActionResult<CartProduct>> AddProductToCart([FromBody] CartProduct newCartProduct)
+        public async Task<ActionResult<CartProduct>> AddCartProduct([FromBody] CartProductDTO dto)
         {
-            //var addedCartProduct = await _productService.AddProductToCart(newCartProduct);
-            //return Ok(addedCartProduct);
-            throw new NotImplementedException();
+            var addedCartProduct = await _productService.AddCartProduct(dto.UserId, dto.ProductId, dto.Quantity);
+
+            var response = new CartProductResponseDTO
+            {
+                Id = addedCartProduct.Id,
+                UserId = addedCartProduct.User.Id,
+                ProductId = addedCartProduct.Product.Id,
+                Quantity = addedCartProduct.Quantity
+            };
+
+            return Ok(response);
         }
 
     }

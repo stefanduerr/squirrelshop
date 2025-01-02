@@ -6,7 +6,7 @@ namespace squirrels.Models
     {
         [Key]
         public int Id { get; set; } // Primary Key
-        public int OrderId { get; set; } // Foreign Key
+        public int UserId { get; set; } // Foreign Key
         public int ProductId { get; set; } // Foreign Key
         public int Quantity { get; set; }
 

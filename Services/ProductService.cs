@@ -27,35 +27,34 @@ public class ProductService
         return newProduct;
     }
 
-    //TODO: Write AddProductToCart method here
-    //public async Task<CartProduct> AddCartProduct(int userId, int productId, int quantity)
-    //{
-    //    // Retrieve the existing User and Product from the database
-    //    var user = await _appDbContext.Users.FindAsync(userId);
-    //    if (user == null)
-    //    {
-    //        throw new ArgumentException($"User with ID {userId} not found.");
-    //    }
+    public async Task<CartProduct> AddCartProduct(int userId, int productId, int quantity)
+    {
+        // Retrieve the existing User and Product from the database
+        var user = await _appDbContext.Users.FindAsync(userId);
+        if (user == null)
+        {
+            throw new ArgumentException($"User with ID {userId} not found.");
+        }
 
-    //    var product = await _appDbContext.Products.FindAsync(productId);
-    //    if (product == null)
-    //    {
-    //        throw new ArgumentException($"Product with ID {productId} not found.");
-    //    }
+        var product = await _appDbContext.Products.FindAsync(productId);
+        if (product == null)
+        {
+            throw new ArgumentException($"Product with ID {productId} not found.");
+        }
 
-    //    // Create a new CartProduct with references to the User and Product
-    //    var cartProduct = new CartProduct
-    //    {
-    //        User = user,
-    //        Product = product,
-    //        Quantity = quantity
-    //    };
+        // Create a new CartProduct with references to the User and Product
+        var cartProduct = new CartProduct
+        {
+            User = user,
+            Product = product,
+            Quantity = quantity
+        };
 
-    //    // Add the CartProduct to the database
-    //    _appDbContext.CartProducts.Add(cartProduct);
-    //    await _appDbContext.SaveChangesAsync();
+        // Add the CartProduct to the database
+        _appDbContext.CartProducts.Add(cartProduct);
+        await _appDbContext.SaveChangesAsync();
 
-    //    return cartProduct;
-    //}
+        return cartProduct;
+    }
 
 }

@@ -29,7 +29,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 
-// Add services to the container.
+// Adding controllers
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddControllers()
@@ -38,7 +38,40 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.Converters.Add(new System.Text.Json.Serialization.JsonStringEnumConverter());
     });
 
-// Register ProductService for dependency injection
+// Add Swagger middleware
+builder.Services.AddSwaggerGen(c =>
+{
+    // Add Security Definition
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        Name = "Authorization", // Specifies the name of the header where the token will be passed
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey, // Defines the security scheme type as an API key (used for passing tokens in headers)
+        Scheme = "Bearer", // Identifies the type of token; here it's "Bearer" for JWT
+        BearerFormat = "JWT", // Specifies the format of the token (JSON Web Token - JWT)
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header, // Indicates that the token should be passed in the HTTP request header
+        Description = "Enter 'Bearer' followed by your JWT token in the text box. Example: Bearer abc123"
+        // Provides a description to guide users on how to input the token (e.g., "Bearer <your-token>")
+    });
+
+    // Add Security Requirement
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme, // Refers to the security scheme defined above
+                    Id = "Bearer" // The ID must match the ID used in the security definition
+                }
+            },
+            new string[] { } // Specifies that no specific scopes are required for this scheme
+        }
+    });
+});
+
+
+// Register Services for dependency injection
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<UserService>();
 
@@ -51,7 +84,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    
 }
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

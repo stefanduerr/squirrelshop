@@ -2,7 +2,7 @@
 
 GET {{squirrels_HostAddress}}/api/login/isauthorized
 Accept: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsIlJvbGUiOiJBZG1pbiIsImV4cCI6MTczNTY0ODE5MSwiaXNzIjoieW91ci1pc3N1ZXIiLCJhdWQiOiJ5b3VyLWF1ZGllbmNlIn0.UfBhxiQgL6N88m-XCCYYlhPOJZkbr1oMInYlpcIEujI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsIlJvbGUiOiJBZG1pbiIsImV4cCI6MTczNTgyNTUxNSwiaXNzIjoieW91ci1pc3N1ZXIiLCJhdWQiOiJ5b3VyLWF1ZGllbmNlIn0.CffDAiApQjX2Z6RbRIhcT814FrinAjcF8QXipZd31dQ
 
 ###
 
@@ -60,3 +60,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hc
 
 GET {{squirrels_HostAddress}}/api/users
 Accept: application/json
+
+###
+
+POST {{squirrels_HostAddress}}/api/products/addToCart
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsIlJvbGUiOiJBZG1pbiIsImV4cCI6MTczNTgyNDQ2NywiaXNzIjoieW91ci1pc3N1ZXIiLCJhdWQiOiJ5b3VyLWF1ZGllbmNlIn0.RYrZhSWiJUfI5irwgnxqh5Dl6m9LswlW_57oNrfl8l8
+{
+  "userId": 1,
+  "productId": 3,
+  "quantity": 1
+}
